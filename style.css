@@ -1,0 +1,91 @@
+/* Estilos CSS para el diseño de Cálculo de Notas */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f9; /* Fondo muy suave */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 550px;
+}
+
+header h1 {
+    color: #007bff; /* Azul primario */
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+header p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 25px;
+}
+
+h2 {
+    color: #007bff;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 8px;
+    margin-top: 0;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background-color: #28a745; /* Verde de acción */
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+.output-box {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #e9f7ef; /* Fondo verde claro para resultado */
+    border-left: 5px solid #28a745;
+    font-size: 1.2em;
+    font-weight: 500;
+    min-height: 40px;
+    border-radius: 4px;
+}
+
+.output-box strong {
+    color: #d32f2f; /* Rojo para destacar la nota final */
+}
