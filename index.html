@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calificación Escala 1.0-5.0</title>
+    <title>Cálculo de Nota Escala 1.0-5.0</title>
     <style>
         /* ======================== */
         /* === ESTILO BONITO CSS === */
         /* ======================== */
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #fce4ec; /* Rosa muy suave para el fondo */
+            background-color: #f0f4f7; /* Gris azulado muy suave */
             color: #212121;
             display: flex;
             justify-content: center;
@@ -27,24 +27,25 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             width: 100%;
             max-width: 600px;
-            border-top: 5px solid #d81b60; /* Rosa fuerte institucional */
+            border-top: 5px solid #007bff; /* Azul primario para la barra institucional */
         }
 
         header h1 {
-            color: #d81b60;
+            color: #007bff; /* Azul fuerte para el título */
             text-align: center;
             margin-bottom: 10px;
-            font-size: 1.8em;
+            font-size: 2em; /* Título más grande */
         }
 
         header p {
             text-align: center;
             color: #757575;
             margin-bottom: 30px;
+            font-style: italic;
         }
 
         h2 {
-            color: #81c784; /* Verde suave para subtítulos */
+            color: #28a745; /* Verde para las secciones */
             border-bottom: 1px solid #e0e0e0;
             padding-bottom: 8px;
             margin-top: 0;
@@ -80,7 +81,7 @@
             width: 100%;
             padding: 15px;
             margin-top: 25px;
-            background-color: #039be5; /* Azul para acción */
+            background-color: #007bff; /* Azul de acción */
             color: white;
             font-weight: 700;
             border: none;
@@ -91,7 +92,7 @@
         }
 
         button:hover {
-            background-color: #0277bd;
+            background-color: #0056b3;
             transform: translateY(-2px);
         }
 
@@ -101,13 +102,13 @@
 
         .output-box {
             padding: 20px;
-            background-color: #e3f2fd; /* Fondo azul claro para resultado */
-            border-left: 5px solid #039be5;
+            background-color: #e9f7ef;
+            border-left: 5px solid #28a745;
             font-size: 1.3em;
             font-weight: 600;
             min-height: 40px;
             border-radius: 4px;
-            color: #1e88e5; /* Color de texto del resultado */
+            color: #1e88e5;
         }
 
         .output-box strong {
@@ -116,11 +117,11 @@
         }
 
         .gano {
-            color: #388e3c; /* Verde para ganar */
+            color: #28a745; /* Verde para ganar */
         }
         
         .perdio {
-            color: #d32f2f; /* Rojo para perder */
+            color: #dc3545; /* Rojo para perder */
         }
     </style>
 </head>
@@ -128,12 +129,12 @@
 
     <div class="container">
         <header>
-            <h1>🇨🇴 Calificación Escala 1.0 - 5.0</h1>
+            <h1>Calificación Escala 1.0 - 5.0</h1>
             <p>Algoritmo de cálculo **Secuencial** y verificación **Condicional** (Ganó/Perdió).</p>
         </header>
 
         <section class="form-section">
-            <h2>Datos del Examen</h2>
+            <h2>Datos de la Evaluación</h2>
             
             <div class="input-group">
                 <label for="correctas">1. Respuestas Correctas Obtenidas:</label>
@@ -163,25 +164,28 @@
 
         /**
          * Función central que calcula la nota y determina si el estudiante ganó o perdió.
+         * La nota más baja posible es 1.0.
          */
         function calcularNotaYEstado(correctas, totalPreguntas) {
             
-            // Verificación de datos básicos para evitar división por cero
-            if (totalPreguntas === 0) {
+            if (totalPreguntas <= 0) {
                 return "⚠️ El número total de preguntas debe ser mayor que cero.";
             }
 
             // --- 1. ESTRUCTURA SECUENCIAL: Cálculo de la Nota ---
             
+            // La escala va de 1.0 (mínimo) a 5.0 (máximo). El rango de puntos es 4.0.
+            const notaMinima = 1.0;
+            const rangoNota = 5.0 - notaMinima; // Rango = 4.0
+            
             // Paso 1: Calcular la Proporción de Acierto (Ejemplo: 12/15 = 0.8)
             let proporcionAcierto = correctas / totalPreguntas;
             
-            // Paso 2: Calcular la Nota Bruta en escala 0.0 a 4.0 (5.0 es el máximo, 1.0 el mínimo)
-            // Se usa 4.0 como rango de la nota (5.0 - 1.0 = 4.0)
-            let notaBruta = proporcionAcierto * 4.0;
+            // Paso 2: Calcular la Nota Bruta dentro del rango (0.8 * 4.0 = 3.2)
+            let notaBruta = proporcionAcierto * rangoNota;
             
-            // Paso 3: Sumar el mínimo (1.0) para llevar la nota a la escala 1.0 - 5.0
-            let notaFinal = notaBruta + 1.0;
+            // Paso 3: Sumar el mínimo (1.0) para mover la nota a la escala 1.0 - 5.0 (3.2 + 1.0 = 4.2)
+            let notaFinal = notaBruta + notaMinima;
             
             // Redondear la nota a dos decimales
             let notaFormateada = notaFinal.toFixed(2);
@@ -191,7 +195,7 @@
             
             let estado = "";
             let claseCSS = "";
-            const notaMinimaAprobatoria = 3.0;
+            const notaMinimaAprobatoria = 3.0; // Perder es menor a 3.0
             
             if (notaFinal < notaMinimaAprobatoria) {
                 estado = "PERDIÓ ❌";
@@ -201,11 +205,8 @@
                 claseCSS = "gano";
             }
             
-            // Log para fines educativos (ver en la Consola F12)
-            console.log(`--- Algoritmo Ejecutado ---`);
-            console.log(`Proporción de Acierto: ${proporcionAcierto.toFixed(2)}`);
+            // Log para fines educativos
             console.log(`Nota Calculada: ${notaFormateada}`);
-            console.log(`Estado: ${estado}`);
 
             return `<span class="${claseCSS}"><strong>${notaFormateada}</strong> (${estado})</span>`;
         }
