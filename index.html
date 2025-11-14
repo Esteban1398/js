@@ -139,7 +139,7 @@
             
             <div class="input-group">
                 <label for="valorPregunta">3. Valor por Correcta (Puntos):</label>
-                <input type="number" id="valorPregunta" value="5" min="1">
+                <input type="number" id="valorPregunta" value="5" min="0">
             </div>
             
             <div class="input-group">
@@ -180,8 +180,8 @@
             
             // Log para fines educativos (ver en la Consola F12)
             console.log(`--- Algoritmo Secuencial Ejecutado ---`);
-            console.log(`Paso 1 (Bruto): ${puntosBrutos} puntos.`);
-            console.log(`Paso 2 (Penalizado): ${puntosPenalizados} puntos.`);
+            console.log(`Paso 1 (Bruto): ${puntosBrutos} puntos. (${correctas} * ${valorPregunta})`);
+            console.log(`Paso 2 (Penalizado): ${puntosPenalizados} puntos. (${incorrectas} * ${penalizacion})`);
             console.log(`Paso 3 (Final): ${notaFinal} puntos.`);
             
             return `Nota Final Calculada: <strong>${notaFinal}</strong> puntos.`;
