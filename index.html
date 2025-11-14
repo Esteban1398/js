@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cálculo de Nota Escala 1.0-5.0</title>
     <style>
-        /* ======================== */
-        /* === ESTILO BONITO CSS === */
-        /* ======================== */
+        /* [Se mantienen los estilos bonitos y funcionales] */
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f0f4f7; /* Gris azulado muy suave */
+            background-color: #f0f4f7;
             color: #212121;
             display: flex;
             justify-content: center;
@@ -27,14 +25,14 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             width: 100%;
             max-width: 600px;
-            border-top: 5px solid #007bff; /* Azul primario para la barra institucional */
+            border-top: 5px solid #007bff;
         }
 
         header h1 {
-            color: #007bff; /* Azul fuerte para el título */
+            color: #007bff;
             text-align: center;
             margin-bottom: 10px;
-            font-size: 2em; /* Título más grande */
+            font-size: 2em;
         }
 
         header p {
@@ -45,7 +43,7 @@
         }
 
         h2 {
-            color: #28a745; /* Verde para las secciones */
+            color: #28a745;
             border-bottom: 1px solid #e0e0e0;
             padding-bottom: 8px;
             margin-top: 0;
@@ -81,7 +79,7 @@
             width: 100%;
             padding: 15px;
             margin-top: 25px;
-            background-color: #007bff; /* Azul de acción */
+            background-color: #007bff;
             color: white;
             font-weight: 700;
             border: none;
@@ -138,7 +136,7 @@
             
             <div class="input-group">
                 <label for="correctas">1. Respuestas Correctas Obtenidas:</label>
-                <input type="number" id="correctas" value="12" min="0">
+                <input type="number" id="correctas" value="1" min="0">
             </div>
             
             <div class="input-group">
@@ -164,34 +162,49 @@
 
         /**
          * Función central que calcula la nota y determina si el estudiante ganó o perdió.
-         * La nota más baja posible es 1.0.
+         * La nota más baja posible es 1.0, asignada solo con 0 aciertos.
          */
         function calcularNotaYEstado(correctas, totalPreguntas) {
             
             if (totalPreguntas <= 0) {
                 return "⚠️ El número total de preguntas debe ser mayor que cero.";
             }
+            if (correctas < 0 || correctas > totalPreguntas) {
+                return "⚠️ Respuestas Correctas no puede ser menor a cero o mayor que el total de preguntas.";
+            }
 
             // --- 1. ESTRUCTURA SECUENCIAL: Cálculo de la Nota ---
-            
-            // La escala va de 1.0 (mínimo) a 5.0 (máximo). El rango de puntos es 4.0.
+            let notaFinal;
             const notaMinima = 1.0;
-            const rangoNota = 5.0 - notaMinima; // Rango = 4.0
+            const notaMaxima = 5.0;
+            const rangoNota = notaMaxima - notaMinima; // Rango = 4.0
+
+            // --- 2. ESTRUCTURA CONDICIONAL ANIDADA para asignar la nota mínima ---
+            if (correctas === 0) {
+                // Caso especial: Si no hay aciertos, la nota es el mínimo absoluto (1.0).
+                notaFinal = notaMinima;
+            } else {
+                // Si hay al menos un acierto (Estructura Secuencial):
+                
+                // Paso 1: Calcular la Proporción de Acierto
+                let proporcionAcierto = correctas / totalPreguntas;
+                
+                // Paso 2: Escalar la proporción al rango de la nota (4.0)
+                let notaBruta = proporcionAcierto * rangoNota;
+                
+                // Paso 3: Sumar el mínimo (1.0) para llevar la nota a la escala 1.0 - 5.0
+                notaFinal = notaBruta + notaMinima;
+                
+                // Aseguramos que la nota no pase de 5.0 debido a posibles errores de floating point
+                if (notaFinal > notaMaxima) {
+                    notaFinal = notaMaxima;
+                }
+            }
             
-            // Paso 1: Calcular la Proporción de Acierto (Ejemplo: 12/15 = 0.8)
-            let proporcionAcierto = correctas / totalPreguntas;
-            
-            // Paso 2: Calcular la Nota Bruta dentro del rango (0.8 * 4.0 = 3.2)
-            let notaBruta = proporcionAcierto * rangoNota;
-            
-            // Paso 3: Sumar el mínimo (1.0) para mover la nota a la escala 1.0 - 5.0 (3.2 + 1.0 = 4.2)
-            let notaFinal = notaBruta + notaMinima;
-            
-            // Redondear la nota a dos decimales
             let notaFormateada = notaFinal.toFixed(2);
 
 
-            // --- 2. ESTRUCTURA CONDICIONAL: Determinar Estado ---
+            // --- 3. ESTRUCTURA CONDICIONAL: Determinar Estado (Ganó/Perdió) ---
             
             let estado = "";
             let claseCSS = "";
@@ -206,7 +219,7 @@
             }
             
             // Log para fines educativos
-            console.log(`Nota Calculada: ${notaFormateada}`);
+            console.log(`Nota Final: ${notaFormateada}`);
 
             return `<span class="${claseCSS}"><strong>${notaFormateada}</strong> (${estado})</span>`;
         }
@@ -219,7 +232,7 @@
             const correctas = parseInt(document.getElementById('correctas').value);
             const totalPreguntas = parseInt(document.getElementById('totalPreguntas').value);
 
-            // Ejecutar el algoritmo Secuencial y Condicional
+            // Ejecutar el algoritmo
             const resultado = calcularNotaYEstado(correctas, totalPreguntas);
             
             // Mostrar el resultado
