@@ -162,7 +162,7 @@
 
         /**
          * Función central que calcula la nota y determina si el estudiante ganó o perdió.
-         * La nota más baja posible es 1.0, asignada solo con 0 aciertos.
+         * Regla: La nota es 1.0 si correctas es 0 o 1.
          */
         function calcularNotaYEstado(correctas, totalPreguntas) {
             
@@ -179,13 +179,13 @@
             const notaMaxima = 5.0;
             const rangoNota = notaMaxima - notaMinima; // Rango = 4.0
 
-            // --- 2. ESTRUCTURA CONDICIONAL ANIDADA para asignar la nota mínima ---
-            if (correctas === 0) {
-                // Caso especial: Si no hay aciertos, la nota es el mínimo absoluto (1.0).
+            // --- 2. ESTRUCTURA CONDICIONAL para aplicar la regla del 1.0 ---
+            if (correctas <= 1) {
+                // Si obtiene 0 o 1 respuesta correcta, la nota es 1.0 estricto.
                 notaFinal = notaMinima;
+                console.log(`Regla Especial Aplicada: Correctas <= 1, Nota = ${notaMinima}`);
             } else {
-                // Si hay al menos un acierto (Estructura Secuencial):
-                
+                // Si obtiene 2 o más respuestas correctas, se aplica la fórmula de escalamiento.
                 // Paso 1: Calcular la Proporción de Acierto
                 let proporcionAcierto = correctas / totalPreguntas;
                 
@@ -195,7 +195,7 @@
                 // Paso 3: Sumar el mínimo (1.0) para llevar la nota a la escala 1.0 - 5.0
                 notaFinal = notaBruta + notaMinima;
                 
-                // Aseguramos que la nota no pase de 5.0 debido a posibles errores de floating point
+                // Aseguramos que la nota no pase de 5.0 (límite máximo)
                 if (notaFinal > notaMaxima) {
                     notaFinal = notaMaxima;
                 }
@@ -218,7 +218,6 @@
                 claseCSS = "gano";
             }
             
-            // Log para fines educativos
             console.log(`Nota Final: ${notaFormateada}`);
 
             return `<span class="${claseCSS}"><strong>${notaFormateada}</strong> (${estado})</span>`;
