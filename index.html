@@ -128,7 +128,7 @@
     <div class="container">
         <header>
             <h1>Calificación Escala 1.0 - 5.0</h1>
-            <p>Algoritmo de cálculo **Secuencial** y verificación **Condicional** (Ganó/Perdió).</p>
+            <p>Algoritmo de cálculo Secuencial y verificación Condicional (Ganó/Perdió).</p>
         </header>
 
         <section class="form-section">
@@ -141,7 +141,7 @@
             
             <div class="input-group">
                 <label for="totalPreguntas">2. Total de Preguntas del Examen:</label>
-                <input type="number" id="totalPreguntas" value="15" min="1">
+                <input type="number" id="totalPreguntas" value="15" min="2">
             </div>
             
             <button onclick="ejecutarCalculo()">Calcular Nota y Estado</button>
@@ -162,42 +162,47 @@
 
         /**
          * Función central que calcula la nota y determina si el estudiante ganó o perdió.
-         * Regla: Usa la multiplicación por 5.0 y fuerza 1.0 como nota mínima.
+         * Regla: La nota es 1.0 si correctas es 0 o 1.
          */
         function calcularNotaYEstado(correctas, totalPreguntas) {
             
-            if (totalPreguntas <= 0) {
-                return "⚠️ El número total de preguntas debe ser mayor que cero.";
+            if (totalPreguntas < 2) {
+                return "⚠️ El total de preguntas debe ser al menos 2 para usar esta escala.";
             }
             if (correctas < 0 || correctas > totalPreguntas) {
-                return "⚠️ Respuestas Correctas no puede ser menor a cero o mayor que el total de preguntas.";
+                return "⚠️ Respuestas Correctas no válidas.";
             }
 
             let notaFinal;
             const notaMinima = 1.0;
             const notaMaxima = 5.0;
+            const rangoNota = notaMaxima - notaMinima; // Rango = 4.0
 
-            // --- 1. ESTRUCTURA SECUENCIAL: Cálculo de la Nota ---
-            
-            // Paso 1: Calcular la Proporción de Acierto
-            let proporcionAcierto = correctas / totalPreguntas;
-            
-            // Paso 2: Aplicar la regla de multiplicación por el valor máximo (5.0)
-            notaFinal = proporcionAcierto * notaMaxima; 
-            
-            console.log(`Paso Secuencial: Nota Bruta (x 5.0) = ${notaFinal.toFixed(2)}`);
-
-            // --- 2. ESTRUCTURA CONDICIONAL para forzar el mínimo y la regla del 1.0 ---
-            
-            // Si la nota calculada es menor que 1.0 O si es 1 acierto, la forzamos a 1.0.
-            if (notaFinal < notaMinima || correctas <= 1) { 
+            // --- 1. ESTRUCTURA CONDICIONAL para aplicar la regla del 1.0 ---
+            if (correctas <= 1) {
+                // Si obtiene 0 o 1 respuesta correcta, la nota es 1.0 estricto.
                 notaFinal = notaMinima;
-                console.log(`Condicional Aplicado: Nota forzada a ${notaMinima}`);
-            }
-
-            // Asegurar que la nota no exceda 5.0
-            if (notaFinal > notaMaxima) {
-                notaFinal = notaMaxima;
+                console.log(`Regla Aplicada: Correctas <= 1, Nota = ${notaMinima}`);
+            } else {
+                // --- 2. ESTRUCTURA SECUENCIAL: Cálculo de la Nota (a partir de 2 aciertos) ---
+                
+                // Ajustamos el numerador y denominador para que la escala comience a subir desde 2 aciertos
+                let correctasAjustadas = correctas - 1;
+                let totalAjustado = totalPreguntas - 1;
+                
+                // Paso 1: Calcular la Proporción del rango útil
+                let proporcionAcierto = correctasAjustadas / totalAjustado;
+                
+                // Paso 2: Escalar la proporción al rango de la nota (4.0)
+                let notaBruta = proporcionAcierto * rangoNota;
+                
+                // Paso 3: Sumar el mínimo (1.0) para llevar la nota a la escala 1.0 - 5.0
+                notaFinal = notaBruta + notaMinima;
+                
+                // Asegurar que la nota no exceda 5.0
+                if (notaFinal > notaMaxima) {
+                    notaFinal = notaMaxima;
+                }
             }
             
             let notaFormateada = notaFinal.toFixed(2);
@@ -207,7 +212,7 @@
             
             let estado = "";
             let claseCSS = "";
-            const notaMinimaAprobatoria = 3.0; // Perder es menor a 3.0
+            const notaMinimaAprobatoria = 3.0; 
             
             if (notaFinal < notaMinimaAprobatoria) {
                 estado = "PERDIÓ ❌";
