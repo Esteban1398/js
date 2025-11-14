@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cálculo de Notas - Algoritmo Secuencial</title>
+    <title>Calificación Escala 1.0-5.0</title>
     <style>
         /* ======================== */
         /* === ESTILO BONITO CSS === */
         /* ======================== */
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #e3f2fd; /* Azul cielo suave para el fondo */
+            background-color: #fce4ec; /* Rosa muy suave para el fondo */
             color: #212121;
             display: flex;
             justify-content: center;
@@ -24,14 +24,14 @@
             background-color: #ffffff;
             padding: 40px;
             border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             width: 100%;
             max-width: 600px;
-            border-top: 5px solid #039be5; /* Barra de color institucional */
+            border-top: 5px solid #d81b60; /* Rosa fuerte institucional */
         }
 
         header h1 {
-            color: #039be5; /* Azul brillante */
+            color: #d81b60;
             text-align: center;
             margin-bottom: 10px;
             font-size: 1.8em;
@@ -44,7 +44,7 @@
         }
 
         h2 {
-            color: #4db6ac; /* Verde menta para subtítulos */
+            color: #81c784; /* Verde suave para subtítulos */
             border-bottom: 1px solid #e0e0e0;
             padding-bottom: 8px;
             margin-top: 0;
@@ -63,24 +63,24 @@
         .input-group label {
             font-weight: 500;
             color: #424242;
-            flex-basis: 70%; /* Controla el ancho de la etiqueta */
+            flex-basis: 70%;
         }
 
         .input-group input {
-            flex-basis: 25%; /* Controla el ancho del input */
+            flex-basis: 25%;
             padding: 10px;
             border-radius: 6px;
             border: 1px solid #bdbdbd;
             box-sizing: border-box;
             font-size: 1em;
-            text-align: right; /* Alinea el número a la derecha */
+            text-align: right;
         }
 
         button {
             width: 100%;
             padding: 15px;
             margin-top: 25px;
-            background-color: #4caf50; /* Verde de éxito */
+            background-color: #039be5; /* Azul para acción */
             color: white;
             font-weight: 700;
             border: none;
@@ -91,7 +91,7 @@
         }
 
         button:hover {
-            background-color: #43a047;
+            background-color: #0277bd;
             transform: translateY(-2px);
         }
 
@@ -101,18 +101,26 @@
 
         .output-box {
             padding: 20px;
-            background-color: #e8f5e9; /* Fondo muy claro para resultado */
-            border-left: 5px solid #4caf50;
+            background-color: #e3f2fd; /* Fondo azul claro para resultado */
+            border-left: 5px solid #039be5;
             font-size: 1.3em;
             font-weight: 600;
             min-height: 40px;
             border-radius: 4px;
-            color: #388e3c; /* Color de texto del resultado */
+            color: #1e88e5; /* Color de texto del resultado */
         }
 
         .output-box strong {
-            color: #d32f2f; /* Rojo para destacar la nota final (alerta si es baja) */
-            font-size: 1.4em;
+            font-size: 1.6em;
+            margin-right: 10px;
+        }
+
+        .gano {
+            color: #388e3c; /* Verde para ganar */
+        }
+        
+        .perdio {
+            color: #d32f2f; /* Rojo para perder */
         }
     </style>
 </head>
@@ -120,40 +128,30 @@
 
     <div class="container">
         <header>
-            <h1>🔢 Algoritmo Secuencial: Cálculo de Nota Final</h1>
-            <p>El código JavaScript sigue un proceso **paso a paso** para determinar el puntaje total.</p>
+            <h1>🇨🇴 Calificación Escala 1.0 - 5.0</h1>
+            <p>Algoritmo de cálculo **Secuencial** y verificación **Condicional** (Ganó/Perdió).</p>
         </header>
 
         <section class="form-section">
-            <h2>Datos del Examen (Entradas)</h2>
+            <h2>Datos del Examen</h2>
             
             <div class="input-group">
-                <label for="correctas">1. Respuestas Correctas:</label>
-                <input type="number" id="correctas" value="8" min="0">
+                <label for="correctas">1. Respuestas Correctas Obtenidas:</label>
+                <input type="number" id="correctas" value="12" min="0">
             </div>
             
             <div class="input-group">
-                <label for="incorrectas">2. Respuestas Incorrectas:</label>
-                <input type="number" id="incorrectas" value="2" min="0">
+                <label for="totalPreguntas">2. Total de Preguntas del Examen:</label>
+                <input type="number" id="totalPreguntas" value="15" min="1">
             </div>
             
-            <div class="input-group">
-                <label for="valorPregunta">3. Valor por Correcta (Puntos):</label>
-                <input type="number" id="valorPregunta" value="5" min="0">
-            </div>
-            
-            <div class="input-group">
-                <label for="penalizacion">4. Penalización por Incorrecta (Puntos):</label>
-                <input type="number" id="penalizacion" value="1" min="0">
-            </div>
-            
-            <button onclick="ejecutarCalculo()">Calcular Nota Final</button>
+            <button onclick="ejecutarCalculo()">Calcular Nota y Estado</button>
         </section>
 
         <section class="result-section">
-            <h2>Resultado del Algoritmo (Salida)</h2>
+            <h2>Resultado Final y Estado</h2>
             <div class="output-box" id="resultado-nota">
-                <p>Ingrese los datos y haga clic en "Calcular Nota Final" para ejecutar el proceso secuencial.</p>
+                <p>Ingrese los datos y haga clic para ver la nota en escala 1.0 a 5.0.</p>
             </div>
         </section>
     </div>
@@ -164,49 +162,66 @@
         // ============================
 
         /**
-         * Función central con la Estructura Secuencial.
-         * Realiza el cálculo paso a paso.
+         * Función central que calcula la nota y determina si el estudiante ganó o perdió.
          */
-        function calcularNotaFinal(correctas, incorrectas, valorPregunta, penalizacion) {
+        function calcularNotaYEstado(correctas, totalPreguntas) {
             
-            // Paso 1: Cálculo de puntos brutos
-            let puntosBrutos = correctas * valorPregunta;
+            // Verificación de datos básicos para evitar división por cero
+            if (totalPreguntas === 0) {
+                return "⚠️ El número total de preguntas debe ser mayor que cero.";
+            }
+
+            // --- 1. ESTRUCTURA SECUENCIAL: Cálculo de la Nota ---
             
-            // Paso 2: Cálculo de penalización
-            let puntosPenalizados = incorrectas * penalizacion;
+            // Paso 1: Calcular la Proporción de Acierto (Ejemplo: 12/15 = 0.8)
+            let proporcionAcierto = correctas / totalPreguntas;
             
-            // Paso 3: Nota final (sustracción)
-            let notaFinal = puntosBrutos - puntosPenalizados;
+            // Paso 2: Calcular la Nota Bruta en escala 0.0 a 4.0 (5.0 es el máximo, 1.0 el mínimo)
+            // Se usa 4.0 como rango de la nota (5.0 - 1.0 = 4.0)
+            let notaBruta = proporcionAcierto * 4.0;
+            
+            // Paso 3: Sumar el mínimo (1.0) para llevar la nota a la escala 1.0 - 5.0
+            let notaFinal = notaBruta + 1.0;
+            
+            // Redondear la nota a dos decimales
+            let notaFormateada = notaFinal.toFixed(2);
+
+
+            // --- 2. ESTRUCTURA CONDICIONAL: Determinar Estado ---
+            
+            let estado = "";
+            let claseCSS = "";
+            const notaMinimaAprobatoria = 3.0;
+            
+            if (notaFinal < notaMinimaAprobatoria) {
+                estado = "PERDIÓ ❌";
+                claseCSS = "perdio";
+            } else {
+                estado = "GANÓ ✅";
+                claseCSS = "gano";
+            }
             
             // Log para fines educativos (ver en la Consola F12)
-            console.log(`--- Algoritmo Secuencial Ejecutado ---`);
-            console.log(`Paso 1 (Bruto): ${puntosBrutos} puntos. (${correctas} * ${valorPregunta})`);
-            console.log(`Paso 2 (Penalizado): ${puntosPenalizados} puntos. (${incorrectas} * ${penalizacion})`);
-            console.log(`Paso 3 (Final): ${notaFinal} puntos.`);
-            
-            return `Nota Final Calculada: <strong>${notaFinal}</strong> puntos.`;
+            console.log(`--- Algoritmo Ejecutado ---`);
+            console.log(`Proporción de Acierto: ${proporcionAcierto.toFixed(2)}`);
+            console.log(`Nota Calculada: ${notaFormateada}`);
+            console.log(`Estado: ${estado}`);
+
+            return `<span class="${claseCSS}"><strong>${notaFormateada}</strong> (${estado})</span>`;
         }
 
         /**
          * Función que se enlaza al botón y maneja la interfaz.
          */
         function ejecutarCalculo() {
-            // 1. Obtener los valores de los inputs y convertirlos a números
+            // Obtener los valores de los inputs
             const correctas = parseInt(document.getElementById('correctas').value);
-            const incorrectas = parseInt(document.getElementById('incorrectas').value);
-            const valorPregunta = parseInt(document.getElementById('valorPregunta').value);
-            const penalizacion = parseInt(document.getElementById('penalizacion').value);
+            const totalPreguntas = parseInt(document.getElementById('totalPreguntas').value);
 
-            // Validar que los números sean válidos (manejo de errores básico)
-            if (isNaN(correctas) || isNaN(incorrectas) || isNaN(valorPregunta) || isNaN(penalizacion)) {
-                document.getElementById('resultado-nota').innerHTML = "⚠️ Por favor, ingrese valores numéricos válidos en todos los campos.";
-                return;
-            }
-
-            // 2. Ejecutar el algoritmo Secuencial
-            const resultado = calcularNotaFinal(correctas, incorrectas, valorPregunta, penalizacion);
+            // Ejecutar el algoritmo Secuencial y Condicional
+            const resultado = calcularNotaYEstado(correctas, totalPreguntas);
             
-            // 3. Mostrar el resultado
+            // Mostrar el resultado
             document.getElementById('resultado-nota').innerHTML = resultado;
         }
     </script>
